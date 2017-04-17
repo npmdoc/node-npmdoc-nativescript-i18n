@@ -1,0 +1,305 @@
+<div class="apidocDiv">
+<style>
+/*csslint
+*/
+.apidocDiv {
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.apidocDiv a[href] {
+    color: #33f;
+    font-weight: bold;
+    text-decoration: none;
+}
+.apidocDiv a[href]:hover {
+    text-decoration: underline;
+}
+.apidocCodeCommentSpan {
+    background: #bbf;
+    color: #000;
+    display: block;
+}
+.apidocCodeKeywordSpan {
+    color: #d00;
+    font-weight: bold;
+}
+.apidocCodePre {
+    background: #eef;
+    border: 1px solid;
+    color: #777;
+    padding: 5px;
+    white-space: pre-wrap;
+}
+.apidocFooterDiv {
+    margin-top: 20px;
+    text-align: center;
+}
+.apidocModuleLi {
+    margin-top: 10px;
+}
+.apidocSectionDiv {
+    border-top: 1px solid;
+    margin-top: 20px;
+}
+.apidocSignatureSpan {
+    color: #777;
+    font-weight: bold;
+}
+</style>
+<h1>api documentation for
+    <a
+
+    >nativescript-i18n (v0.1.6)</a>
+</h1>
+<h4>An i18n nativescript plugin using native standards</h4>
+<div class="apidocSectionDiv"><a
+    href="#apidoc.tableOfContents"
+    id="apidoc.tableOfContents"
+><h1>table of contents</h1></a><ol>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.nativescript-i18n">module nativescript-i18n</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.nativescript-i18n.before_prepare">
+            function <span class="apidocSignatureSpan">nativescript-i18n.</span>before_prepare
+            <span class="apidocSignatureSpan">(logger, platformsData, projectData, hookArgs)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.nativescript-i18n.before_prepare">module nativescript-i18n.before_prepare</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.nativescript-i18n.before_prepare.before_prepare">
+            function <span class="apidocSignatureSpan">nativescript-i18n.</span>before_prepare
+            <span class="apidocSignatureSpan">(logger, platformsData, projectData, hookArgs)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+</ol></div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.nativescript-i18n" id="apidoc.module.nativescript-i18n">module nativescript-i18n</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.nativescript-i18n.before_prepare" id="apidoc.element.nativescript-i18n.before_prepare">
+        function <span class="apidocSignatureSpan">nativescript-i18n.</span>before_prepare
+        <span class="apidocSignatureSpan">(logger, platformsData, projectData, hookArgs)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">before_prepare = function (logger, platformsData, projectData, hookArgs) {
+	var platform = hookArgs.platform.toLowerCase();
+	var appResourcesDirectoryPath = projectData.appResourcesDirectoryPath;
+	var i18nFolderPath = path.join(projectData.projectDir, &#x27;app&#x27;, &#x27;i18n&#x27;);
+	var pjson = require(path.join(projectData.projectDir, &#x27;package.json&#x27;));
+	var defaultLang = &#x27;en&#x27;;
+
+	// NS cocoa permission description key array. To enable i18 for below keys.
+	var iOSPermissionArray = [&#x22;NSAppleMusicUsageDescription&#x22;, &#x22;NSBluetoothPeripheralUsageDescription&#x22;, &#x22;NSCalendarsUsageDescription
+&#x22;, &#x22;NSCameraUsageDescription&#x22;, &#x22;NSContactsUsageDescription&#x22;,
+		&#x22;NSHealthShareUsageDescription&#x22;, &#x22;NSHealthUpdateUsageDescription&#x22;, &#x22;NSHomeKitUsageDescription&#x22;, &#x22;NSLocationAlwaysUsageDescription
+&#x22;, &#x22;NSLocationWhenInUseUsageDescription&#x22;
+		, &#x22;NSMicrophoneUsageDescription&#x22;, &#x22;NSMotionUsageDescription&#x22;, &#x22;NSPhotoLibraryUsageDescription&#x22;, &#x22;NSRemindersUsageDescription&#x22;, &#x22;
+NSSiriUsageDescription&#x22;
+		, &#x22;NSSpeechRecognitionUsageDescription&#x22;, &#x22;NSVideoSubscriberAccountUsageDescription&#x22;];
+
+	if (pjson[&#x27;nativescript-i18n&#x27;]) {
+		if (pjson[&#x27;nativescript-i18n&#x27;].customLangPath) {
+			var customLangPath = path.join(projectData.projectDir, pjson[&#x27;nativescript-i18n&#x27;].customLangPath);
+			if (fs.existsSync(customLangPath)) {
+				i18nFolderPath = customLangPath;
+			}
+		}
+		if (pjson[&#x27;nativescript-i18n&#x27;].defaultLang) {
+			defaultLang = pjson[&#x27;nativescript-i18n&#x27;].defaultLang;
+		}
+	}
+
+
+	return new Promise(function(resolve, reject) {
+		if (fs.existsSync(i18nFolderPath)) {
+			if (platform === &#x27;android&#x27;) {
+				fs.readdirSync(i18nFolderPath).forEach(function(lang) {
+					var outputFile;
+
+					if (lang === defaultLang) {
+						var androidPath = path.join(appResourcesDirectoryPath, &#x27;Android&#x27;, &#x27;values&#x27;);
+						if (!fs.existsSync(androidPath)) {
+							fs.mkdirSync(androidPath);
+						}
+						outputFile = path.join(appResourcesDirectoryPath, &#x27;Android&#x27;, &#x27;values&#x27;, &#x27;strings.xml&#x27;);
+					} else {
+						var androidPath = path.join(appResourcesDirectoryPath, &#x27;Android&#x27;, &#x27;values-&#x27; + lang);
+						if (!fs.existsSync(androidPath)) {
+							fs.mkdirSync(androidPath);
+						}
+						outputFile = path.join(appResourcesDirectoryPath, &#x27;Android&#x27;, &#x27;values-&#x27; + lang, &#x27;strings.xml&#x27;);
+					}
+					fs.writeFileSync(outputFile, fs.readFileSync(path.join(i18nFolderPath, lang, &#x27;strings.xml&#x27;), &#x27;utf8&#x27;));
+				});
+			} else if (platform == &#x27;ios&#x27;) {
+				var plist = require(&#x27;plist&#x27;);
+				var infoPlistFile = path.join(appResourcesDirectoryPath, &#x27;iOS&#x27;, &#x27;Info.plist&#x27;);
+				var plistObj = plist.parse(fs.readFileSync(infoPlistFile, &#x27;utf8&#x27;));
+				plistObj[&#x22;CFBundleDevelopmentRegion&#x22;] = defaultLang;
+				fs.writeFileSync(infoPlistFile, plist.build(plistObj));
+
+				fs.readdirSync(i18nFolderPath).forEach(function(lang) {
+					var iosLangPath = path.join(appResourcesDirectoryPath, &#x27;iOS&#x27;, lang + &#x27;.lproj&#x27;);
+					if (!fs.existsSync(iosLangPath)) {
+						fs.mkdirSync(iosLangPath);
+					}
+
+					var outputFile = path.join(appResourcesDirectoryPath, &#x27;iOS&#x27;, lang + &#x27;.lproj&#x27;, &#x27;Localizable.strings&#x27;);
+					var fileData = fs.readFileSync(path.join(i18nFolderPath, lang, &#x27;strings.xml&#x27;), &#x27;utf8&#x27;);
+					var doc = new parser().parseFromString(fileData);
+					var defs = doc.getElementsByTagName(&#x27;string&#x27;);
+					var result = &#x27;&#x27;;
+					var infoPlistData = &#x22;&#x22;;
+					var outputPlistFile = path.join(appResourcesDirectoryPath, &#x27;iOS&#x27;, lang + &#x27;.lproj&#x27;, &#x27;InfoPlist.strings&#x27;);
+					for (var i = 0; i &#x3c; defs.length; i++) {
+						var def = defs[i];
+						result += &#x27;&#x22;&#x27; + def.getAttribute(&#x27;name&#x27;) + &#x27;&#x22;=&#x22;&#x27; + unescape(def.textContent) + &#x27;&#x22;;\n&#x27;;
+
+						if (def.getAttribute(&#x27;name&#x27;) == &#x27;app_name&#x27;) {
+							infoPlistData = infoPlistData + &#x27;&#x22;CFBundleDisplayName&#x22;=&#x22;&#x27; + unescape(def.textContent) + &#x27;&#x22;;\n&#x27;;
+						} else if (iOSPermissionArray.indexOf(def.getAttribute(&#x27;name&#x27;)) &#x3e; -1) {
+							infoPlistData = infoPlistData + &#x27;&#x22;&#x27; + def.getAttribute(&#x27;name&#x27;) + &#x27;&#x22;=&#x22;&#x27; + unescape(def.textContent) + &#x27;&#x22;;\n&#x27;;
+						}
+					}
+					fs.writeFileSync(outputPlistFile, infoPlistData);
+					fs.writeFileSync(outputFile, result);
+				});
+			} else if (platform == &#x27;windows&#x27;) {
+				//TODO PRs gladly accepted :P
+			}
+		}
+		resolve();
+	}) ...</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.nativescript-i18n.before_prepare" id="apidoc.module.nativescript-i18n.before_prepare">module nativescript-i18n.before_prepare</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.nativescript-i18n.before_prepare.before_prepare" id="apidoc.element.nativescript-i18n.before_prepare.before_prepare">
+        function <span class="apidocSignatureSpan">nativescript-i18n.</span>before_prepare
+        <span class="apidocSignatureSpan">(logger, platformsData, projectData, hookArgs)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">before_prepare = function (logger, platformsData, projectData, hookArgs) {
+	var platform = hookArgs.platform.toLowerCase();
+	var appResourcesDirectoryPath = projectData.appResourcesDirectoryPath;
+	var i18nFolderPath = path.join(projectData.projectDir, &#x27;app&#x27;, &#x27;i18n&#x27;);
+	var pjson = require(path.join(projectData.projectDir, &#x27;package.json&#x27;));
+	var defaultLang = &#x27;en&#x27;;
+
+	// NS cocoa permission description key array. To enable i18 for below keys.
+	var iOSPermissionArray = [&#x22;NSAppleMusicUsageDescription&#x22;, &#x22;NSBluetoothPeripheralUsageDescription&#x22;, &#x22;NSCalendarsUsageDescription
+&#x22;, &#x22;NSCameraUsageDescription&#x22;, &#x22;NSContactsUsageDescription&#x22;,
+		&#x22;NSHealthShareUsageDescription&#x22;, &#x22;NSHealthUpdateUsageDescription&#x22;, &#x22;NSHomeKitUsageDescription&#x22;, &#x22;NSLocationAlwaysUsageDescription
+&#x22;, &#x22;NSLocationWhenInUseUsageDescription&#x22;
+		, &#x22;NSMicrophoneUsageDescription&#x22;, &#x22;NSMotionUsageDescription&#x22;, &#x22;NSPhotoLibraryUsageDescription&#x22;, &#x22;NSRemindersUsageDescription&#x22;, &#x22;
+NSSiriUsageDescription&#x22;
+		, &#x22;NSSpeechRecognitionUsageDescription&#x22;, &#x22;NSVideoSubscriberAccountUsageDescription&#x22;];
+
+	if (pjson[&#x27;nativescript-i18n&#x27;]) {
+		if (pjson[&#x27;nativescript-i18n&#x27;].customLangPath) {
+			var customLangPath = path.join(projectData.projectDir, pjson[&#x27;nativescript-i18n&#x27;].customLangPath);
+			if (fs.existsSync(customLangPath)) {
+				i18nFolderPath = customLangPath;
+			}
+		}
+		if (pjson[&#x27;nativescript-i18n&#x27;].defaultLang) {
+			defaultLang = pjson[&#x27;nativescript-i18n&#x27;].defaultLang;
+		}
+	}
+
+
+	return new Promise(function(resolve, reject) {
+		if (fs.existsSync(i18nFolderPath)) {
+			if (platform === &#x27;android&#x27;) {
+				fs.readdirSync(i18nFolderPath).forEach(function(lang) {
+					var outputFile;
+
+					if (lang === defaultLang) {
+						var androidPath = path.join(appResourcesDirectoryPath, &#x27;Android&#x27;, &#x27;values&#x27;);
+						if (!fs.existsSync(androidPath)) {
+							fs.mkdirSync(androidPath);
+						}
+						outputFile = path.join(appResourcesDirectoryPath, &#x27;Android&#x27;, &#x27;values&#x27;, &#x27;strings.xml&#x27;);
+					} else {
+						var androidPath = path.join(appResourcesDirectoryPath, &#x27;Android&#x27;, &#x27;values-&#x27; + lang);
+						if (!fs.existsSync(androidPath)) {
+							fs.mkdirSync(androidPath);
+						}
+						outputFile = path.join(appResourcesDirectoryPath, &#x27;Android&#x27;, &#x27;values-&#x27; + lang, &#x27;strings.xml&#x27;);
+					}
+					fs.writeFileSync(outputFile, fs.readFileSync(path.join(i18nFolderPath, lang, &#x27;strings.xml&#x27;), &#x27;utf8&#x27;));
+				});
+			} else if (platform == &#x27;ios&#x27;) {
+				var plist = require(&#x27;plist&#x27;);
+				var infoPlistFile = path.join(appResourcesDirectoryPath, &#x27;iOS&#x27;, &#x27;Info.plist&#x27;);
+				var plistObj = plist.parse(fs.readFileSync(infoPlistFile, &#x27;utf8&#x27;));
+				plistObj[&#x22;CFBundleDevelopmentRegion&#x22;] = defaultLang;
+				fs.writeFileSync(infoPlistFile, plist.build(plistObj));
+
+				fs.readdirSync(i18nFolderPath).forEach(function(lang) {
+					var iosLangPath = path.join(appResourcesDirectoryPath, &#x27;iOS&#x27;, lang + &#x27;.lproj&#x27;);
+					if (!fs.existsSync(iosLangPath)) {
+						fs.mkdirSync(iosLangPath);
+					}
+
+					var outputFile = path.join(appResourcesDirectoryPath, &#x27;iOS&#x27;, lang + &#x27;.lproj&#x27;, &#x27;Localizable.strings&#x27;);
+					var fileData = fs.readFileSync(path.join(i18nFolderPath, lang, &#x27;strings.xml&#x27;), &#x27;utf8&#x27;);
+					var doc = new parser().parseFromString(fileData);
+					var defs = doc.getElementsByTagName(&#x27;string&#x27;);
+					var result = &#x27;&#x27;;
+					var infoPlistData = &#x22;&#x22;;
+					var outputPlistFile = path.join(appResourcesDirectoryPath, &#x27;iOS&#x27;, lang + &#x27;.lproj&#x27;, &#x27;InfoPlist.strings&#x27;);
+					for (var i = 0; i &#x3c; defs.length; i++) {
+						var def = defs[i];
+						result += &#x27;&#x22;&#x27; + def.getAttribute(&#x27;name&#x27;) + &#x27;&#x22;=&#x22;&#x27; + unescape(def.textContent) + &#x27;&#x22;;\n&#x27;;
+
+						if (def.getAttribute(&#x27;name&#x27;) == &#x27;app_name&#x27;) {
+							infoPlistData = infoPlistData + &#x27;&#x22;CFBundleDisplayName&#x22;=&#x22;&#x27; + unescape(def.textContent) + &#x27;&#x22;;\n&#x27;;
+						} else if (iOSPermissionArray.indexOf(def.getAttribute(&#x27;name&#x27;)) &#x3e; -1) {
+							infoPlistData = infoPlistData + &#x27;&#x22;&#x27; + def.getAttribute(&#x27;name&#x27;) + &#x27;&#x22;=&#x22;&#x27; + unescape(def.textContent) + &#x27;&#x22;;\n&#x27;;
+						}
+					}
+					fs.writeFileSync(outputPlistFile, infoPlistData);
+					fs.writeFileSync(outputFile, result);
+				});
+			} else if (platform == &#x27;windows&#x27;) {
+				//TODO PRs gladly accepted :P
+			}
+		}
+		resolve();
+	}) ...</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocFooterDiv">
+    [ this document was created with
+    <a href="https://github.com/kaizhu256/node-utility2" target="_blank">utility2</a>
+    ]
+</div>
+</div>
