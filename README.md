@@ -1,4 +1,7 @@
-# api documentation for  nativescript-i18n (v0.1.6)  [![npm package](https://img.shields.io/npm/v/npmdoc-nativescript-i18n.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-nativescript-i18n) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-nativescript-i18n.svg)](https://travis-ci.org/npmdoc/node-npmdoc-nativescript-i18n)
+# npmdoc-nativescript-i18n
+
+#### basic api documentation for  nativescript-i18n (v0.1.6)  [![npm package](https://img.shields.io/npm/v/npmdoc-nativescript-i18n.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-nativescript-i18n) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-nativescript-i18n.svg)](https://travis-ci.org/npmdoc/node-npmdoc-nativescript-i18n)
+
 #### An i18n nativescript plugin using native standards
 
 [![NPM](https://nodei.co/npm/nativescript-i18n.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/nativescript-i18n)
@@ -72,7 +75,8 @@
         "preuninstall": "node preuninstall.js",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
-    "version": "0.1.6"
+    "version": "0.1.6",
+    "bin": {}
 }
 ```
 
